@@ -29,6 +29,8 @@
   "scripts": {
     "dev": "nodemon index.ts",
     "build": "tsc; cp package.json dist; cp -r prisma dist",
-    "test": "jest"
+    "test": "jest",
+    "prisma:generate": "prisma generate client",
+    "serve": "node index.js"
   }
 }
