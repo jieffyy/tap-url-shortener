@@ -18,8 +18,6 @@ export const shortenUrl = async (req: Request, res: Response) => {
     return
   }
 
-
-
   const shortUrl = `${faker.word.adjective()}-${nanoid()}`
 
   try {
