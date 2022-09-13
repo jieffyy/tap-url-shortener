@@ -22,7 +22,11 @@ jobs:
         node-version: 18.x
         cache: 'npm'
         cache-dependency-path: './backend/yarn.lock'
-    
+        
+    - name: Install deps
+      run: yarn
+      working-directory: ./backend/
+      
     - name: Run tests
       run: yarn test
       working-directory: ./backend/
