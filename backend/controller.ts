@@ -14,7 +14,7 @@ export const shortenUrl = async (req: Request, res: Response) => {
   const { origin } = req.body
 
   if (!isValidUrl(origin)) {
-    res.status(400)
+    res.status(400).json()
     return
   }
 
@@ -42,7 +42,7 @@ export const shortenUrl = async (req: Request, res: Response) => {
 export const findUrl = async (req: Request, res: Response) => {
   const { shortUrl } = req.params
   if (!shortUrl) {
-    res.status(404)
+    res.status(404).json()
     return
   }
 
@@ -54,7 +54,7 @@ export const findUrl = async (req: Request, res: Response) => {
     })
 
     if (!dbModel) {
-      res.status(404)
+      res.status(404).json()
       return
     } else {
       res.redirect(dbModel.original_url)
@@ -62,7 +62,7 @@ export const findUrl = async (req: Request, res: Response) => {
     }
   } catch (error) {
     logger.error('ERR_SHORTEN-URL_FAILED-FIND', { shortUrl, error })
-    res.status(404)
+    res.status(404).json()
     return
   }
 }
