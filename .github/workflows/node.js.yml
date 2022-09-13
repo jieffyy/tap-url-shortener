@@ -16,20 +16,20 @@ jobs:
     - name: Checkout repo
       uses: actions/checkout@v3
       
-    - name: Use only backend
-      run: cd backend
-      
     - name: Use Node.js 18.x
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
         cache: 'npm'
+        cache-dependency-path: './backend/yarn.lock'
     
     - name: Run tests
       run: yarn test
+      working-directory: ./backend/
       
     - name: Build
       run: yarn build && cp package.json ./dist
+      working-directory: ./backend/
       
     - name: Check
       run: ls ./dist
