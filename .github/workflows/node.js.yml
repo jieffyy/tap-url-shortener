@@ -8,8 +8,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,10 +29,35 @@ jobs:
     - name: Run tests
       run: yarn test
       working-directory: ./backend/
+  
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
       
-    - name: Build
-      run: yarn build && cp package.json ./dist
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'npm'
+        cache-dependency-path: './backend/yarn.lock'
+        
+    - name: Install deps
+      run: yarn
       working-directory: ./backend/
       
-    - name: Check
+    - name: Build
+      run: yarn build
+      working-directory: ./backend/
+    
+    - name: ls
       run: ls ./dist
+      working-directory: ./backend/
+      
+    
+      
+  
+    
+  
