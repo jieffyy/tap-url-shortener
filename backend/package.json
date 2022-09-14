@@ -32,6 +32,6 @@
     "test": "jest",
     "prisma:generate": "prisma generate client",
     "serve": "node index.js",
-    "run": "node index.ts"
+    "start": "node index.js"
   }
 }
