@@ -10,8 +10,6 @@ import {
   Heading,
   Icon,
   Input,
-  InputGroup,
-  InputRightAddon,
   Text
 } from '@chakra-ui/react'
 import { shortenUrl } from './api'
@@ -19,6 +17,7 @@ import * as yup from 'yup'
 import ENV from './env'
 import { TbNetwork } from 'react-icons/tb'
 import { ArrowForwardIcon, CopyIcon } from '@chakra-ui/icons'
+import axios from 'axios'
 
 function isValidUrl(url: string): boolean {
   return yup.string().url().isValidSync(url)
@@ -32,6 +31,10 @@ function App() {
   const [url, setUrl] = useState<string>('')
   const [result, setResult] = useState<string>('')
   const [err, setErr] = useState<string>('')
+
+  const [validUses, setValidUses] = useState<number>(0)
+  const [errUses, setErrUses] = useState<string>('')
+
   const [notifyCopy, setNotifyCopy] = useState<string>('')
 
   const onInputChange = useCallback((e: any) => {
@@ -69,6 +72,7 @@ function App() {
 
   const onSubmitHandler = (e: any) => {
     setErr('')
+    setErrUses('')
     e.preventDefault()
 
     if (!isValidUrl(url)) {
@@ -76,8 +80,14 @@ function App() {
       return
     }
 
+    if (validUses <= 0) {
+      setErrUses('You need to enter a number greater than 0')
+      return
+    }
+
     shortenUrl({
-      origin: url
+      origin: url,
+      validUses
     })
       .then((res) => setResult(getShortUrl(res.data.shortUrl)))
       .catch(() => {
@@ -102,24 +112,36 @@ function App() {
       <form style={{ minWidth: '40%' }} onSubmit={onSubmitHandler}>
         <FormControl isInvalid={!!err}>
           <FormLabel>Enter the original URL</FormLabel>
-          <InputGroup>
-            <Input
-              type='url'
-              value={url}
-              onChange={onInputChange}
-              autoFocus
-              width={'100%'}
-            />
-            <InputRightAddon
-              children={
-                <Button type='submit' p={0} m={0} onClick={onSubmitHandler}>
-                  Shorten
-                </Button>
-              }
-            />
-          </InputGroup>
+          <Input
+            type='url'
+            value={url}
+            onChange={onInputChange}
+            autoFocus
+            width={'100%'}
+          />
           <FormErrorMessage>{err}</FormErrorMessage>
         </FormControl>
+
+        <FormControl isInvalid={!!errUses}>
+          <FormLabel>Valid Uses</FormLabel>
+          <Input
+            type='number'
+            value={validUses}
+            onChange={(e) => setValidUses(parseInt(e.target.value))}
+            width={'100%'}
+          />
+          <FormErrorMessage>{errUses}</FormErrorMessage>
+        </FormControl>
+
+        <Button
+          type='submit'
+          p={0}
+          mt={2}
+          width='100%'
+          onClick={onSubmitHandler}
+        >
+          Shorten
+        </Button>
       </form>
 
       {result && (

@@ -2,7 +2,8 @@ import axios, { AxiosPromise } from "axios"
 import ENV from "./env"
 
 export type ShortenReqBody = {
-  origin: string
+  origin: string,
+  validUses: number
 }
 
 export type ShortenResBody = {
