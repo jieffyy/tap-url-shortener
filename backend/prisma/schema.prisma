@@ -12,6 +12,7 @@ datasource db {
 
 model url_map {
   id           String @id @default(cuid())
-  original_url String @unique
+  original_url String
   short_url    String @unique
+  valid_uses   Int    @default(0)
 }
